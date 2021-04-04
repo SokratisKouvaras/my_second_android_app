@@ -1,14 +1,40 @@
 import React from 'react';
 import {View, Text, StyleSheet,TextInput, TouchableOpacity} from 'react-native';
+import {AuthContext} from '../components/context'
 
+const LoginScreen = ({navigation}) => {
 
+    const { signIn } = React.useContext(AuthContext);
 
+    const [data, setData] = React.useState({
+        username: '',
+        password: '',
+    });
+    // Function to handle user typing the user name
+    // A check for at least 4 chars in done
+    // If all the checks are passed the value the user types is passed as username
+    
+    const textInputChange = (val) => {
+        if( val.trim().length >= 4 ) {
+            setData({
+                ...data,
+                username: val,
+               // check_textInputChange: true,
+              //  isValidUser: true
+            });
+        } else {
+            setData({
+                ...data,
+                username: val,
+               // check_textInputChange: false,
+                //isValidUser: false
+            });
+        }
+    }
 
-
-class LoginScreen extends React.Component{
-    render(){
-
-
+    const loginHandle = (userName, password) => {
+        signIn(true);
+    }
 
         return(
             <View style={Styles.container}>
@@ -17,6 +43,7 @@ class LoginScreen extends React.Component{
                         <TextInput style={Styles.TextInput}
                         placeholder="Enter username"
                         placeholderTextColor="black"
+                        onChangeText={(val) => textInputChange(val)}
                         />
                     </View>
                     <View style={Styles.formRow}>
@@ -28,7 +55,7 @@ class LoginScreen extends React.Component{
                     </View>
                     <TouchableOpacity 
                         style={Styles.signinBtn}
-                        
+                        onPress={() => {loginHandle( data.username, data.password )}}
                     >
                         <Text style={Styles.signinTxt}>
                             Login
@@ -36,12 +63,11 @@ class LoginScreen extends React.Component{
                     </TouchableOpacity>
                 </View>
             </View>
-        )
-    
-}
+        );
+        }
 
-}
-export default LoginScreen;
+
+        export default LoginScreen;
 
 const Styles = StyleSheet.create({
     container:{
