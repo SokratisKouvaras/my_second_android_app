@@ -10,6 +10,21 @@ const LoginScreen = ({navigation}) => {
         username: '',
         password: '',
     });
+    // Function to handle user typing the password
+    const handlePasswordChange = (val) => {
+        if( val.trim().length >= 1 ) {
+            setData({
+                ...data,
+                password: val,
+            });
+        } else {
+            setData({
+                ...data,
+                password: val,
+            });
+        }
+    }
+
     // Function to handle user typing the user name
     // A check for at least 4 chars in done
     // If all the checks are passed the value the user types is passed as username
@@ -31,9 +46,29 @@ const LoginScreen = ({navigation}) => {
             });
         }
     }
+// Dummy user
+//eve.holt@reqres.in
+//cityslicka
+    const loginHandle = async (userName, password) => {
+    const response = await fetch('https://reqres.in/api/login', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    username: userName,
+    password: password
+  })
+});
+const json = await response.json();
+console.log('username');
+console.log(userName);
+console.log('password')
+console.log(password);
+console.log(json);
 
-    const loginHandle = (userName, password) => {
-        signIn(true);
+        //signIn(true);
     }
 
         return(
@@ -51,6 +86,7 @@ const LoginScreen = ({navigation}) => {
                         placeholder="Enter password"
                         placeholderTextColor="black"
                         secureTextEntry={true}
+                        onChangeText={(val) => handlePasswordChange(val)}
                         />
                     </View>
                     <TouchableOpacity 
