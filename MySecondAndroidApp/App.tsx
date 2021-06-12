@@ -1,115 +1,53 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
- import React from 'react';
- import {
-   SafeAreaView,
-   ScrollView,
-   StatusBar,
-   StyleSheet,
-   Text,
-   useColorScheme,
-   View,
- } from 'react-native';
+ import React,{useEffect} from 'react';
+ // Import screens
+ import LoginScreen from './screens/loginScreen';
+ import DashboardScreen from './screens/DashboardScreen';
+ import AuthLoadingScreen from './screens/authLoadingScreen';
+ import {DrawerContent} from './screens/DrawerContent';
+// Import navigator
+ import { createDrawerNavigator } from '@react-navigation/drawer';
+// Import Auth
+import { AuthContext } from './components/context';
 
  import {
-   Colors,
-   DebugInstructions,
-   Header,
-   LearnMoreLinks,
-   ReloadInstructions,
- } from 'react-native/Libraries/NewAppScreen';
+  NavigationContainer,
+  DefaultTheme as NavigationDefaultTheme,
+  DarkTheme as NavigationDarkTheme}
+from '@react-navigation/native';
 
- const Section: React.FC<{
-   title: string;
- }> = ({children, title}) => {
-   const isDarkMode = useColorScheme() === 'dark';
+const App = () => {
+const Drawer = createDrawerNavigator();
+const [isLoading, setIsLoading] = React.useState(true);
+const [userToken, setUserToken] = React.useState(null); 
+const authContext = React.useMemo(() => ({
+  signIn:() => {
+    setUserToken('fgkj');
+    setIsLoading(false)
+  },
+  signOut:()  => {
+    setUserToken(null);
+    setIsLoading(false);
+  }
+}),[]);
+//<Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}></Drawer.Navigator>
+//<Drawer.Navigator initialRouteName="Dashboard Screen">
    return (
-     <View style={styles.sectionContainer}>
-       <Text
-         style={[
-           styles.sectionTitle,
-           {
-             color: isDarkMode ? Colors.white : Colors.black,
-           },
-         ]}>
-         {title}
-       </Text>
-       <Text
-         style={[
-           styles.sectionDescription,
-           {
-             color: isDarkMode ? Colors.light : Colors.dark,
-           },
-         ]}>
-         {children}
-       </Text>
-     </View>
+    <AuthContext.Provider value={authContext}>
+          <NavigationContainer theme={NavigationDefaultTheme}>
+             { userToken !== null ? (
+            <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+           
+                  <Drawer.Screen name="Dashboard Screen" component={DashboardScreen} />
+                  <Drawer.Screen name="authLoading Screen" component={AuthLoadingScreen} />
+            </Drawer.Navigator>
+             )
+            :
+            <LoginScreen/>
+        }
+          </NavigationContainer>
+      </AuthContext.Provider>
+
    );
  };
-
- const App = () => {
-   const isDarkMode = useColorScheme() === 'dark';
-
-   const backgroundStyle = {
-     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-   };
-
-   return (
-     <SafeAreaView style={backgroundStyle}>
-       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-       <ScrollView
-         contentInsetAdjustmentBehavior="automatic"
-         style={backgroundStyle}>
-         <Header />
-         <View
-           style={{
-             backgroundColor: isDarkMode ? Colors.black : Colors.white,
-           }}>
-           <Section title="Step One">
-             Edit <Text style={styles.highlight}>App.js</Text> to change this
-             screen and then come back to see your edits.
-           </Section>
-           <Section title="See Your Changes">
-             <ReloadInstructions />
-           </Section>
-           <Section title="Debug">
-             <DebugInstructions />
-           </Section>
-           <Section title="Learn More">
-             Read the docs to discover what to do next:
-           </Section>
-           <LearnMoreLinks />
-         </View>
-       </ScrollView>
-     </SafeAreaView>
-   );
- };
-
- const styles = StyleSheet.create({
-   sectionContainer: {
-     marginTop: 32,
-     paddingHorizontal: 24,
-   },
-   sectionTitle: {
-     fontSize: 24,
-     fontWeight: '600',
-   },
-   sectionDescription: {
-     marginTop: 8,
-     fontSize: 18,
-     fontWeight: '400',
-   },
-   highlight: {
-     fontWeight: '700',
-   },
- });
 
  export default App;
