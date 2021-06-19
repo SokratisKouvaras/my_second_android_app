@@ -1,7 +1,7 @@
  import React,{useEffect} from 'react';
  // Import screens
  import LoginScreen from './screens/loginScreen';
- import DashboardScreen from './screens/DashboardScreen';
+ import DashboardScreen from './screens/dashboardScreen';
  import AuthLoadingScreen from './screens/authLoadingScreen';
  import {DrawerContent} from './screens/DrawerContent';
 // Import navigator
